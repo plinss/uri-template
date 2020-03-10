@@ -9,12 +9,12 @@ from .variable import Variable, VariableInvalid
 __all__ = ['URITemplate', 'Variable', 'ExpansionInvalid', 'ExpansionReserved', 'VariableInvalid']
 
 
-def expand(template: str, **kwargs) -> Optional[str]:
+def expand(template: str, **kwargs, default_url: Optional[str] = None) -> Optional[str]:
     try:
         templ = URITemplate(template)
         return templ.expand(**kwargs)
     except Exception:
-        return None
+        return default_url
 
 
 def partial(template: str, **kwargs) -> Optional[str]:
