@@ -99,20 +99,14 @@ class URITemplate(object):
                 vars[var.name] = var
         return [var.name for var in vars.values()]
 
-    def expand(self, **kwargs) -> Optional[str]:
-        """Expand the template."""
-        try:
-            expanded = [expansion.expand(kwargs) for expansion in self.expansions]
-        except ExpansionFailed:
-            return None
+    def expand(self, **kwargs) -> str:
+        """Expand the template. Raise ExpansionFailed"""
+        expanded = [expansion.expand(kwargs) for expansion in self.expansions]
         return ''.join([expansion for expansion in expanded if (expansion is not None)])
 
-    def partial(self, **kwargs) -> Optional['URITemplate']:
-        """Expand the template, preserving expansions for missing variables."""
-        try:
-            expanded = [expansion.partial(kwargs) for expansion in self.expansions]
-        except ExpansionFailed:
-            return None
+    def partial(self, **kwargs) -> URITemplate:
+        """Expand the template, preserving expansions for missing variables. Raise ExpansionFailed"""
+        expanded = [expansion.partial(kwargs) for expansion in self.expansions]
         return URITemplate(''.join(expanded))
 
     @property
